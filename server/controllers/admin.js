@@ -31,4 +31,21 @@ const getAdminProfile = async (req, res) => {
   }
 };
 
-export { getAdminProfile };
+const getAllusers = async (req, res) => {
+  try{
+    const Users = await User.find({});
+    res.json({
+      success: true,
+      users: Users
+    })
+
+  }catch(error){  
+    console.log(error)
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    })
+  }
+}
+
+export { getAdminProfile , getAllusers };
