@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { Toaster, toast } from 'react-hot-toast';
-
+import {Link} from "react-router-dom"
 const Register = () => {
   const formik = useFormik({
     initialValues: {
@@ -81,7 +81,7 @@ const Register = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="role" className="block text-black-700 text-sm font-bold mb-2">
+            <label htmlFor="role" className="block text-gray-700 text-sm font-bold mb-2">
               Role
             </label>
             <select
@@ -89,7 +89,7 @@ const Register = () => {
               name="role"
               onChange={formik.handleChange}
               value={formik.values.role}
-              className="border rounded block w-full py-2 px-3"
+              className="border rounded w-full py-2 px-3"
             >
               <option value="user">User</option>
               <option value="admin">Admin</option>
@@ -102,6 +102,7 @@ const Register = () => {
             >
               Register
             </button>
+            <Link className='ml-4 text-blue-500' to='/'>Already registered </Link>
           </div>
         </form>
       </div>
