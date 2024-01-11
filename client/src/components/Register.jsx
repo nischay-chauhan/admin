@@ -1,8 +1,9 @@
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { Toaster, toast } from 'react-hot-toast';
-import {Link} from "react-router-dom"
+import {Link , useNavigate} from "react-router-dom"
 const Register = () => {
+  const Navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       firstName: '',
@@ -11,11 +12,47 @@ const Register = () => {
       password: '',
       role: 'user', 
     },
+    validate: (values) => {
+      const errors = {};
+
+      if (!values.firstName) {
+        errors.firstName = 'First name is required';
+        toast.error('First name is required');
+      }
+
+      if (!values.lastName) {
+        errors.lastName = 'Last name is required';
+        toast.error('Last name is required');
+      }
+
+      if (!values.email) {
+        errors.email = 'Email is required';
+        toast.error('Email is required');
+      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Invalid email address';
+        toast.error('Invalid email address');
+      }
+
+      if (!values.password) {
+        errors.password = 'Password is required';
+        toast.error('Password is required');
+      } else if (values.password.length < 5) {
+        errors.password = 'Password must be at least 5 characters long';
+        toast.error('Password must be at least 5 characters long');
+      }
+
+      return errors;
+    },
+    validateOnBlur : false,
+    validateOnChange : false,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('http://localhost:3001/register', values);
+        const response = await axios.post('http://localhost:3001/api/register', values);
+
         console.log(response.data); 
         toast.success('Registration successful');
+        
+        Navigate('/');
       } catch (error) {
         console.error('Registration failed', error.message);
         toast.error('Registration failed');
@@ -24,8 +61,11 @@ const Register = () => {
   });
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex flex-col items-center justify-center">
       <Toaster />
+      <div className='max-w-md mx-auto text-center'>
+      <h1 className='text-4xl text-gray-800 font-bold'>Register</h1>
+      </div>
       <div className="max-w-md mx-auto">
         <form onSubmit={formik.handleSubmit} className="mt-8 bg-white p-6 rounded shadow-md">
           <div className="mb-4">

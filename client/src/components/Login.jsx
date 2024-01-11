@@ -1,20 +1,49 @@
 import { useFormik } from 'formik';
 import axios from 'axios';
-import { Toaster , toast } from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Toaster, toast } from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
+    validate: (values) => {
+      const errors = {};
+
+      if (!values.email) {
+        errors.email = 'Email is required';
+        toast.error('Email is required');
+      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Invalid email address';
+        toast.error('Invalid email address');
+      }
+
+      if (!values.password) {
+        errors.password = 'Password is required';
+        toast.error('Password is required');
+      }
+
+      return errors;
+    },
+    validateOnBlur: false,
+    validateOnChange: false,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('http://localhost:3001/login', values);
-        console.log(response.data); 
+        const response = await axios.post('http://localhost:3001/api/login', values);
+        console.log(response.data);
+        const { token, user } = response.data;
+        console.log(token, user);
+
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+
+        console.log(response.data);
         toast.success('Login successful');
+        navigate('/profile');
       } catch (error) {
         console.error('Login failed', error.message);
         toast.error('Login failed');
@@ -24,7 +53,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-    <Toaster />
+      <Toaster />
       <div className="max-w-md mx-auto">
         <form onSubmit={formik.handleSubmit} className="mt-8 bg-white p-6 rounded shadow-md">
           <div className="mb-4">
@@ -60,7 +89,9 @@ const Login = () => {
             >
               Login
             </button>
-            <Link to="/register" className="ml-2 text-blue-500">Register</Link>
+            <Link to="/register" className="ml-2 text-blue-500">
+              Register
+            </Link>
           </div>
         </form>
       </div>
