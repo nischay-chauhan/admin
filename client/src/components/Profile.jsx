@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'; 
 import { useEffect, useState } from 'react';
 import { getAdminProfile, getUserProfile, updateUserProfile } from "../helper/helper";
 
@@ -72,7 +73,6 @@ const Profile = () => {
     }
   };
   
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -99,6 +99,11 @@ const Profile = () => {
               >
                 Edit Details
               </button>
+              {user.role === 'admin' && (
+                <Link  to="/getAllusers" className="text-blue-500 ml-4 hover:underline mt-2">
+                  See All Users
+                </Link>
+              )}
             </>
           ) : (
             <>

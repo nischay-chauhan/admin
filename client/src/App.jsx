@@ -2,6 +2,7 @@ import { createBrowserRouter , RouterProvider } from "react-router-dom"
 import Login from "./components/Login"
 import Register from "./components/Register"
 import Profile from "./components/Profile"
+import AdminAllUsers from "./components/AdminAllUsers"
 function App() {
 
   const router = createBrowserRouter([
@@ -16,6 +17,10 @@ function App() {
     {
       path : "/profile",
       element : <Profile /> 
+    },
+    {
+      path : "/getAllusers",
+      element : <AdminAllUsers />
     }
   ])
 

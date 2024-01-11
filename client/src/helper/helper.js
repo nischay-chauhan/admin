@@ -71,3 +71,17 @@ export const updateUserProfile = async (userData, token) => {
       throw new Error('Error updating user profile');
     }
   };
+
+export const getAllUsers = async (token) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/admin/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching all users:', error);
+      throw new Error('Error fetching all users');
+    }
+  };
