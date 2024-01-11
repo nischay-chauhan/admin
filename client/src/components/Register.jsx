@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
-import axios from 'axios';
 import { Toaster, toast } from 'react-hot-toast';
 import {Link , useNavigate} from "react-router-dom"
+import { register } from '../helper/helper';
 const Register = () => {
   const Navigate = useNavigate();
   const formik = useFormik({
@@ -47,11 +47,9 @@ const Register = () => {
     validateOnChange : false,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('http://localhost:3001/api/register', values);
-
-        console.log(response.data); 
+        const response = await register(values)
+        console.log(response); 
         toast.success('Registration successful');
-        
         Navigate('/');
       } catch (error) {
         console.error('Registration failed', error.message);

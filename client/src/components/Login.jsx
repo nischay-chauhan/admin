@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import axios from 'axios';
+import { login } from '../helper/helper';
 import { Toaster, toast } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -33,15 +33,15 @@ const Login = () => {
     validateOnChange: false,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('http://localhost:3001/api/login', values);
-        console.log(response.data);
-        const { token, user } = response.data;
+        const response = await login(values);
+        console.log(response);
+        const { token, user } = response;
         console.log(token, user);
 
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
 
-        console.log(response.data);
+        console.log(response);
         toast.success('Login successful');
         navigate('/profile');
       } catch (error) {
