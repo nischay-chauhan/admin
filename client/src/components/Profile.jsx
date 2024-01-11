@@ -1,15 +1,10 @@
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getAdminProfile, getUserProfile, updateUserProfile } from "../helper/helper";
-
+import { getAdminProfile, getUserProfile, updateUserProfile } from '../helper/helper';
+import { useFormik } from 'formik';
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-  });
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -43,9 +38,34 @@ const Profile = () => {
     }
   };
 
+  const formik = useFormik({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+    },
+    enableReinitialize: true,
+    onSubmit: async (values) => {
+      try {
+        const token = localStorage.getItem('token');
+        await updateUserProfile(values, token);
+
+        if (user.role === 'admin') {
+          fetchAdminProfile(token);
+        } else {
+          fetchUserProfile(token);
+        }
+
+        setEditMode(false);
+      } catch (error) {
+        console.error('Error updating user profile:', error.message);
+      }
+    },
+  });
+
   const handleEditClick = () => {
     setEditMode(true);
-    setFormData({
+    formik.setValues({
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
@@ -56,30 +76,16 @@ const Profile = () => {
     setEditMode(false);
   };
 
-  const handleSaveClick = async () => {
+  const handleLogout = async () => {
     try {
       const token = localStorage.getItem('token');
-      await updateUserProfile(formData, token);
-  
-      if (user.role === 'admin') {
-        fetchAdminProfile(token);
-      } else {
-        fetchUserProfile(token);
-      }
-  
-      setEditMode(false);
+      await handleLogout(token); 
+      window.location.href = '/';
     } catch (error) {
-      console.error('Error updating user profile:', error.message);
+      console.error('Error logging out:', error.message);
     }
   };
   
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   if (!user) {
     return <div className="text-center mt-8">Loading...</div>;
   }
@@ -100,20 +106,26 @@ const Profile = () => {
                 Edit Details
               </button>
               {user.role === 'admin' && (
-                <Link  to="/getAllusers" className="text-blue-500 ml-4 hover:underline mt-2">
+                <Link to="/getAllusers" className="text-blue-500 ml-4 hover:underline mt-2">
                   See All Users
                 </Link>
               )}
+                <button
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
             </>
           ) : (
-            <>
+            <form onSubmit={formik.handleSubmit}>
               <label className="block">
                 First Name:
                 <input
                   type="text"
                   name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.firstName}
                   className="form-input mt-1 block w-full"
                 />
               </label>
@@ -122,8 +134,8 @@ const Profile = () => {
                 <input
                   type="text"
                   name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.lastName}
                   className="form-input mt-1 block w-full"
                 />
               </label>
@@ -132,26 +144,27 @@ const Profile = () => {
                 <input
                   type="email"
                   name="email"
-                  value={formData.email}
-                  onChange={handleChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.email}
                   className="form-input mt-1 block w-full"
                 />
               </label>
               <div className="mt-4">
                 <button
+                  type="submit"
                   className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
-                  onClick={handleSaveClick}
                 >
                   Save
                 </button>
                 <button
+                  type="button"
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                   onClick={handleCancelClick}
                 >
                   Cancel
                 </button>
               </div>
-            </>
+            </form>
           )}
         </div>
       </div>

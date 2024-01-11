@@ -85,3 +85,24 @@ export const getAllUsers = async (token) => {
       throw new Error('Error fetching all users');
     }
   };
+
+  export const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        `${API_BASE_URL}/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/';  
+    } catch (error) {
+      console.error('Error logging out:', error.message);
+    }
+  };
