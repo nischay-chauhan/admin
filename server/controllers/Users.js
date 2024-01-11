@@ -2,9 +2,8 @@ import User from '../models/User.js';
 
 const getUserProfile = async (req, res) => {
     try {
-        console.log(req.user);
+        
         const userId = req.user.payload.id;
-
         const user = await User.findById(userId);
 
         if (!user) {

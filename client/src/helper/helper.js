@@ -1,4 +1,3 @@
-// helpers/apiHelper.js
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
@@ -27,3 +26,31 @@ export const register = async (userData) => {
     throw new Error('Registration failed');
   }
 };
+
+export const getAdminProfile = async (token) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/admin/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching admin profile:', error);
+      throw new Error('Error fetching admin profile');
+    }
+  };
+  
+  export const getUserProfile = async (token) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      throw new Error('Error fetching user profile');
+    }
+  };

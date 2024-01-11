@@ -1,5 +1,6 @@
+// Profile.jsx
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { getAdminProfile, getUserProfile } from "../helper/helper";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -11,36 +12,26 @@ const Profile = () => {
       const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
 
       if (userFromLocalStorage && userFromLocalStorage.role === 'admin') {
-        fetchAdminProfile();
+        fetchAdminProfile(token);
       } else {
-        fetchUserProfile();
+        fetchUserProfile(token);
       }
     }
   }, []);
 
-  const fetchAdminProfile = async () => {
+  const fetchAdminProfile = async (token) => {
     try {
-      const response = await axios.get('http://localhost:3001/api/admin/profile', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      setUser(response.data);
+      const response = await getAdminProfile(token);
+      setUser(response);
     } catch (error) {
       console.error('Error fetching admin profile:', error.message);
     }
   };
 
-  const fetchUserProfile = async () => {
+  const fetchUserProfile = async (token) => {
     try {
-      const response = await axios.get('http://localhost:3001/api/profile', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      setUser(response.data.user);
+      const response = await getUserProfile(token);
+      setUser(response.user);
     } catch (error) {
       console.error('Error fetching user profile:', error.message);
     }
