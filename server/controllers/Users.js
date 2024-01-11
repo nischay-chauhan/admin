@@ -2,7 +2,7 @@ import User from '../models/User.js';
 
 const getUserProfile = async (req, res) => {
     try {
-        
+
         const userId = req.user.payload.id;
         const user = await User.findById(userId);
 
@@ -32,6 +32,7 @@ const getUserProfile = async (req, res) => {
 };
 
 const updateUserProfile = async (req, res) => {
+    console.log(req.user);
     try {
         const userId = req.user.payload.id;
 

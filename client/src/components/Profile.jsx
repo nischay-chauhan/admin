@@ -1,9 +1,14 @@
-// Profile.jsx
 import { useEffect, useState } from 'react';
-import { getAdminProfile, getUserProfile } from "../helper/helper";
+import { getAdminProfile, getUserProfile, updateUserProfile } from "../helper/helper";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+  });
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -37,17 +42,112 @@ const Profile = () => {
     }
   };
 
+  const handleEditClick = () => {
+    setEditMode(true);
+    setFormData({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+    });
+  };
+
+  const handleCancelClick = () => {
+    setEditMode(false);
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await updateUserProfile(formData, token);
+  
+      if (user.role === 'admin') {
+        fetchAdminProfile(token);
+      } else {
+        fetchUserProfile(token);
+      }
+  
+      setEditMode(false);
+    } catch (error) {
+      console.error('Error updating user profile:', error.message);
+    }
+  };
+  
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   if (!user) {
     return <div className="text-center mt-8">Loading...</div>;
   }
 
   return (
-    <div className="max-w-md mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl mt-8">
+    <div className="max-w-md mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4">
       <div className="md:flex">
         <div className="p-4">
-          <h2 className="text-2xl font-semibold">{user.firstName} {user.lastName}</h2>
-          <p className="text-gray-600">Email: {user.email}</p>
-          <p className="text-gray-600">Role: {user.role}</p>
+          {!editMode ? (
+            <>
+              <h2 className="text-2xl font-semibold">{user.firstName} {user.lastName}</h2>
+              <p className="text-gray-600">Email: {user.email}</p>
+              <p className="text-gray-600">Role: {user.role}</p>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
+                onClick={handleEditClick}
+              >
+                Edit Details
+              </button>
+            </>
+          ) : (
+            <>
+              <label className="block">
+                First Name:
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className="form-input mt-1 block w-full"
+                />
+              </label>
+              <label className="block mt-4">
+                Last Name:
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  className="form-input mt-1 block w-full"
+                />
+              </label>
+              <label className="block mt-4">
+                Email:
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="form-input mt-1 block w-full"
+                />
+              </label>
+              <div className="mt-4">
+                <button
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
+                  onClick={handleSaveClick}
+                >
+                  Save
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={handleCancelClick}
+                >
+                  Cancel
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

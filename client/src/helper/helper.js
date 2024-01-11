@@ -41,7 +41,7 @@ export const getAdminProfile = async (token) => {
     }
   };
   
-  export const getUserProfile = async (token) => {
+export const getUserProfile = async (token) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/profile`, {
         headers: {
@@ -52,5 +52,22 @@ export const getAdminProfile = async (token) => {
     } catch (error) {
       console.error('Error fetching user profile:', error);
       throw new Error('Error fetching user profile');
+    }
+  };
+
+export const updateUserProfile = async (userData, token) => {
+    try {
+      const response = await axios.put(`${API_BASE_URL}/update-profile`, userData, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success('Profile updated successfully');
+      return response.data;
+    } catch (error) {
+      console.error('Error updating user profile:', error);
+      toast.error('Error updating user profile'); 
+      throw new Error('Error updating user profile');
     }
   };
