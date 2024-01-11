@@ -2,11 +2,7 @@ import User from '../models/User.js';
 
 const getAdminProfile = async (req, res) => {
   try {
-
-   console.log(req.user)
-
-    const admin = await User.findById(req.user.id);
-    console.log(admin)
+  const admin = await User.findById(req.user.id);
 
     if (!admin) {
       return res.status(404).json({
