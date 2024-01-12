@@ -1,3 +1,4 @@
+import Post from '../models/Post.js';
 import User from '../models/User.js';
 
 const getUserProfile = async (req, res) => {
@@ -94,5 +95,22 @@ const updateUserProfile = async (req, res) => {
     }
 };
 
+const getAllPosts = async(req , res) => {
+    try{
+    const posts = await Post.find().populate('author' , 'firstName lastName');
 
-export { getUserProfile , updateUserProfile };
+    res.json({
+        success : true,
+        posts,
+    });
+}catch(error){
+    console.log(error);
+    res.status(500).json({
+        success : false,
+        message : 'Internal server error',
+    })
+}
+}
+
+
+export { getUserProfile , updateUserProfile , getAllPosts };
