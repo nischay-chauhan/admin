@@ -1,18 +1,38 @@
 import { useFormik } from 'formik';
-import { toast} from "react-hot-toast"
-import {useNavigate} from "react-router-dom"
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import { createPost } from '../helper/helper';
 const AdminPost = () => {
-  const Navigate = useNavigate()
+  const Navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       title: '',
       content: '',
     },
+    validate: (values) => {
+      const errors = {};
+
+      if (!values.title.trim()) {
+        errors.title = 'Title is required';
+      }
+
+      if (!values.content.trim()) {
+        errors.content = 'Content is required';
+      }
+
+      return errors;
+    },
     onSubmit: async (values) => {
       try {
         const token = localStorage.getItem('token');
-        await createPost(values , token);
+        const errors = formik.validateForm(values);
+
+        if (Object.keys(errors).length > 0) {
+          Object.values(errors).forEach((error) => toast.error(error));
+          return;
+        }
+        await createPost(values, token);
         toast.success('Post created successfully');
         console.log('Post created successfully');
         Navigate('/info');
@@ -34,18 +54,30 @@ const AdminPost = () => {
             name="title"
             onChange={formik.handleChange}
             value={formik.values.title}
-            className="form-input mt-1 outline bg-gray-100 block w-full"
+            className={`form-input mt-1 outline bg-gray-100 block w-full ${
+              formik.errors.title ? 'border-red-500' : ''
+            }`}
           />
         </label>
+        {formik.errors.title && (
+          <p className="text-red-500 mt-1">{formik.errors.title}</p>
+        )}
+        
         <label className="block mt-4">
           Content:
           <textarea
             name="content"
             onChange={formik.handleChange}
             value={formik.values.content}
-            className="form-input mt-1 bg-gray-100 outline block w-full"
+            className={`form-input mt-1 bg-gray-100 outline block w-full ${
+              formik.errors.content ? 'border-red-500' : ''
+            }`}
           />
         </label>
+        {formik.errors.content && (
+          <p className="text-red-500 mt-1">{formik.errors.content}</p>
+        )}
+
         <div className="mt-4">
           <button
             type="submit"

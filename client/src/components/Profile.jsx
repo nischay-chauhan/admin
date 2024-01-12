@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { getAdminProfile, getUserProfile, updateUserProfile } from '../helper/helper';
 import { useFormik } from 'formik';
 import AdminPost from './AdminPost'; 
-
+import {Toaster} from "react-hot-toast"
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -96,6 +96,7 @@ const Profile = () => {
     <div>
       <div className="max-w-md mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4">
         <div className="md:flex">
+          <Toaster />
           <div className="p-4">
             {!editMode ? (
               <>
