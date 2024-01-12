@@ -20,6 +20,8 @@ const Profile = () => {
         fetchUserProfile(token);
       }
     }
+
+    
   }, []);
 
   const fetchAdminProfile = async (token) => {
@@ -82,6 +84,9 @@ const Profile = () => {
     try {
       const token = localStorage.getItem('token');
       await handleLogout(token); 
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.reload(true);
       window.location.href = '/';
     } catch (error) {
       console.error('Error logging out:', error.message);
@@ -89,7 +94,9 @@ const Profile = () => {
   };
 
   if (!user) {
-    return <div className="text-center mt-8">Loading...</div>;
+    return <div className=" text-center mt-8">
+      LLoading error reaching... <Link className='text-blue-500 hover:underline' to='/'>Try loggin in again</Link>
+      </div>;
   }
 
   return (
@@ -109,18 +116,24 @@ const Profile = () => {
                 >
                   Edit Details
                 </button>
-                {user.role === 'admin' && (
-                  <Link to="/getAllusers" className="text-blue-500 ml-4 hover:underline mt-2">
-                    See All Users
-                  </Link>
-                )}
-                  <button
+                <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
                   onClick={handleLogout}
                 >
                   Logout
                 </button>
+                <div className='flex flex-col '>
+                {user.role === 'admin' && (
+                  <div className='mt-2'>
+                  <Link to="/getAllusers" className="text-blue-500 ml-4 hover:underline mt-2">
+                    See All Users
+                  </Link>
+                  </div>
+                )}
+                <div className='mt-2'>
                 <Link className='text-blue-500 ml-4 hover:underline' to={'/info'}>See all the Posts</Link>
+                </div>
+                </div>
               </>
             ) : (
               <form onSubmit={formik.handleSubmit}>

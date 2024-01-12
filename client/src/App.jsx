@@ -4,6 +4,7 @@ import Register from "./components/Register"
 import Profile from "./components/Profile"
 import AdminAllUsers from "./components/AdminAllUsers"
 import Info from "./page/Info"
+import PageNotFound from "./page/PageNotFound"
 function App() {
 
   const router = createBrowserRouter([
@@ -26,6 +27,10 @@ function App() {
     {
       path : "/info",
       element : <Info />
+    },
+    {
+      path : "*",
+      element : <PageNotFound />
     }
   ])
 
