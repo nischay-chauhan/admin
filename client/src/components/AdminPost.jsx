@@ -1,9 +1,9 @@
 import { useFormik } from 'formik';
-import axios from 'axios';
 import { toast} from "react-hot-toast"
 import {useNavigate} from "react-router-dom"
+import { createPost } from '../helper/helper';
 const AdminPost = () => {
-    const Navigate = useNavigate()
+  const Navigate = useNavigate()
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -12,12 +12,7 @@ const AdminPost = () => {
     onSubmit: async (values) => {
       try {
         const token = localStorage.getItem('token');
-        await axios.post('http://localhost:3001/api/admin/posts', values, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
+        await createPost(values , token);
         toast.success('Post created successfully');
         console.log('Post created successfully');
         Navigate('/info');
@@ -39,7 +34,7 @@ const AdminPost = () => {
             name="title"
             onChange={formik.handleChange}
             value={formik.values.title}
-            className="form-input mt-1 block w-full"
+            className="form-input mt-1 outline bg-gray-100 block w-full"
           />
         </label>
         <label className="block mt-4">
@@ -48,7 +43,7 @@ const AdminPost = () => {
             name="content"
             onChange={formik.handleChange}
             value={formik.values.content}
-            className="form-input mt-1 block w-full"
+            className="form-input mt-1 bg-gray-100 outline block w-full"
           />
         </label>
         <div className="mt-4">

@@ -85,7 +85,7 @@ export const getAllUsers = async (token) => {
     }
   };
 
-  export const handleLogout = async () => {
+export const handleLogout = async () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
@@ -103,5 +103,32 @@ export const getAllUsers = async (token) => {
       window.location.href = '/';  
     } catch (error) {
       console.error('Error logging out:', error.message);
+    }
+  };
+export const createPost = async (values , token) => {
+    try {
+     const response =  await axios.post('http://localhost:3001/api/admin/posts', values, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error creating post:', error);
+      throw new Error('Error creating post');
+    }
+  };
+  
+export const getAllPosts = async (token) => {
+    try {
+      const response = await axios.get('http://localhost:3001/api/posts', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      throw new Error('Error fetching posts');
     }
   };

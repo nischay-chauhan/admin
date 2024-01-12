@@ -1,7 +1,7 @@
 import  { useState, useEffect } from 'react';
-import axios from 'axios';
 import PostCard from '../components/PostCard';
 import { Link } from 'react-router-dom';
+import { getAllPosts } from '../helper/helper';
 
 const Info = () => {
   const [posts, setPosts] = useState([]);
@@ -11,12 +11,8 @@ const Info = () => {
     const fetchPosts = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3001/api/posts', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setPosts(response.data.posts);
+        const response = await getAllPosts(token)
+        setPosts(response.posts);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching posts:', error.message);
