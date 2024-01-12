@@ -1,5 +1,5 @@
 import User from '../models/User.js';
-
+import Post from '../models/Post.js';
 const getAdminProfile = async (req, res) => {
   try {
   const admin = await User.findById(req.user.id);
@@ -44,4 +44,31 @@ const getAllusers = async (req, res) => {
   }
 }
 
-export { getAdminProfile , getAllusers };
+const createPost = async (req , res) => {
+
+  try {
+  const {title , content} = req.body;
+    console.log(req.user)
+  const {id : authorId} = req.user; //from isAdmin middleware
+   
+  const newPost = await Post.create({
+    title,
+    content,
+    author : authorId,
+  });
+
+  res.status(201).json({
+    success : true,
+    message : "Post created Successfully",
+    post : newPost
+  })
+}catch(error){
+  console.log(error)
+  res.status(500).json({
+    success : false,
+    message : "Internal server error"
+  })
+}
+}
+
+export { getAdminProfile , getAllusers , createPost };

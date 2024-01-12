@@ -3,6 +3,7 @@ import Login from "./components/Login"
 import Register from "./components/Register"
 import Profile from "./components/Profile"
 import AdminAllUsers from "./components/AdminAllUsers"
+import Info from "./page/Info"
 function App() {
 
   const router = createBrowserRouter([
@@ -21,6 +22,10 @@ function App() {
     {
       path : "/getAllusers",
       element : <AdminAllUsers />
+    },
+    {
+      path : "/info",
+      element : <Info />
     }
   ])
 

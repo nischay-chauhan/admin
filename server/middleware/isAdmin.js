@@ -11,7 +11,6 @@ function isAdmin(req, res, next) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log(decoded);
     const userRole = decoded.payload.role;
-    console.log(userRole);
     if (userRole !== 'admin') {
       return res.status(403).json({ success: false, message: 'Forbidden' });
     }

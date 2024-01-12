@@ -48,7 +48,7 @@ const Register = () => {
     onSubmit: async (values) => {
       try {
         const response = await register(values)
-        console.log(response); 
+        console.log(response);
         toast.success('Registration successful');
         Navigate('/');
       } catch (error) {

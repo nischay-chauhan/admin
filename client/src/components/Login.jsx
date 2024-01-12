@@ -34,14 +34,11 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         const response = await login(values);
-        console.log(response);
+        console.log("after login response : ",response);
         const { token, user } = response;
         console.log(token, user);
-
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
-
-        console.log(response);
         toast.success('Login successful');
         navigate('/profile');
       } catch (error) {
@@ -51,11 +48,15 @@ const Login = () => {
     },
   });
 
+
+
   return (
     <div className="min-h-screen flex items-center justify-center">
       <Toaster />
       <div className="max-w-md mx-auto">
+        
         <form onSubmit={formik.handleSubmit} className="mt-8 bg-white p-6 rounded shadow-md">
+        <h1 className=' text-3xl text-center font-bold mb-10'>LOGIN PAGE  </h1>
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
               Email
