@@ -44,44 +44,42 @@ const AdminPost = () => {
   });
 
   return (
-    <div className="max-w-md mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4">
-      <h2 className="text-2xl font-semibold mb-4">Create a New Post</h2>
+    <div className="max-w-md mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4 rounded-lg">
+      <h2 className="text-3xl font-semibold mb-6 text-center">Create a New Post</h2>
       <form onSubmit={formik.handleSubmit}>
-        <label className="block">
-          Title:
+        <div className="mb-4">
+          <label className="block text-sm font-semibold">Title:</label>
           <input
             type="text"
             name="title"
             onChange={formik.handleChange}
             value={formik.values.title}
-            className={`form-input mt-1 outline bg-gray-100 block w-full ${
-              formik.errors.title ? 'border-red-500' : ''
+            className={`form-input mt-1 p-2 w-full  bg-gray-100 rounded ${
+              formik.errors.title ? 'border border-red-500' : ''
             }`}
           />
-        </label>
-        {formik.errors.title && (
-          <p className="text-red-500 mt-1">{formik.errors.title}</p>
-        )}
-        
-        <label className="block mt-4">
-          Content:
+          {formik.errors.title && (
+            <p className="text-sm text-red-500 mt-1">{formik.errors.title}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-semibold">Content:</label>
           <textarea
             name="content"
             onChange={formik.handleChange}
             value={formik.values.content}
-            className={`form-input mt-1 bg-gray-100 outline block w-full ${
-              formik.errors.content ? 'border-red-500' : ''
+            className={`form-input mt-1 p-2 w-full bg-gray-100  rounded ${
+              formik.errors.content ? 'border border-red-500' : ''
             }`}
           />
-        </label>
-        {formik.errors.content && (
-          <p className="text-red-500 mt-1">{formik.errors.content}</p>
-        )}
-
+          {formik.errors.content && (
+            <p className="text-sm text-red-500 mt-1">{formik.errors.content}</p>
+          )}
+        </div>
         <div className="mt-4">
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
           >
             Create Post
           </button>

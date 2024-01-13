@@ -1,10 +1,11 @@
-import  { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link , useNavigate } from 'react-router-dom';
 import { getAdminProfile, getUserProfile, updateUserProfile } from '../helper/helper';
 import { useFormik } from 'formik';
-import AdminPost from './AdminPost'; 
-import {Toaster} from "react-hot-toast"
+import AdminPost from './AdminPost';
+import { Toaster } from 'react-hot-toast';
 const Profile = () => {
+  const Navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
 
@@ -21,7 +22,7 @@ const Profile = () => {
       }
     }
 
-    
+
   }, []);
 
   const fetchAdminProfile = async (token) => {
@@ -47,6 +48,22 @@ const Profile = () => {
       firstName: '',
       lastName: '',
       email: '',
+    },
+    validate: (values) => {
+      const errors = {};
+      if (!values.firstName.trim()) {
+        errors.title = 'firstname is required';
+      }
+
+      if (!values.lastName.trim()) {
+        errors.content = 'lastname is required';
+      }
+
+      if (!values.email.trim()) {
+        errors.content = 'email is required';
+      }
+
+      return errors;
     },
     enableReinitialize: true,
     onSubmit: async (values) => {
@@ -83,10 +100,9 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem('token');
-      await handleLogout(token); 
+      await handleLogout(token);
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.reload(true);
       window.location.href = '/';
     } catch (error) {
       console.error('Error logging out:', error.message);
@@ -94,47 +110,56 @@ const Profile = () => {
   };
 
   if (!user) {
-    return <div className=" text-center mt-8">
-      LLoading error reaching... <Link className='text-blue-500 hover:underline' to='/'>Try loggin in again</Link>
-      </div>;
+    return (
+      <div className="text-center mt-8">
+        Loading error reaching...{' '}
+        <Link className="text-blue-500 hover:underline" to="/">
+          Try loggin in again
+        </Link>
+      </div>
+    );
   }
 
   return (
     <div>
-      <div className="max-w-md mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4">
-        <div className="md:flex">
-          <Toaster />
-          <div className="p-4">
-            {!editMode ? (
-              <>
-                <h2 className="text-2xl font-semibold">{user.firstName} {user.lastName}</h2>
-                <p className="text-gray-600">Email: {user.email}</p>
-                <p className="text-gray-600">Role: {user.role}</p>
+    <div className="max-w-md mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4">
+      <div className="md:flex">
+        <Toaster />
+        <div className="p-4">
+          {!editMode ? (
+            <>
+              <h2 className="text-2xl font-semibold">{user.firstName} {user.lastName}</h2>
+              <p className="text-gray-600">Email: {user.email}</p>
+              <p className="text-gray-600">Role: {user.role}</p>
+              <div className="mt-4 flex flex-wrap">
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
                   onClick={handleEditClick}
                 >
                   Edit Details
                 </button>
+                {user.role === 'admin' && (
+                  <button
+                    onClick={() => Navigate("/getAllusers")}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
+                  >
+                    See All Users
+                  </button>
+                )}
                 <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
+                  onClick={() => Navigate("/info")}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
+                >
+                  See all the Posts
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto"
                   onClick={handleLogout}
                 >
                   Logout
                 </button>
-                <div className='flex flex-col '>
-                {user.role === 'admin' && (
-                  <div className='mt-2'>
-                  <Link to="/getAllusers" className="text-blue-500 ml-4 hover:underline mt-2">
-                    See All Users
-                  </Link>
-                  </div>
-                )}
-                <div className='mt-2'>
-                <Link className='text-blue-500 ml-4 hover:underline' to={'/info'}>See all the Posts</Link>
-                </div>
-                </div>
-              </>
+              </div>
+            </>
             ) : (
               <form onSubmit={formik.handleSubmit}>
                 <label className="block">
@@ -167,16 +192,16 @@ const Profile = () => {
                     className="form-input mt-1 block w-full"
                   />
                 </label>
-                <div className="mt-4">
+                <div className="mt-4 flex flex-wrap">
                   <button
                     type="submit"
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full md:mr-2 w-full md:w-auto"
                   >
                     Save
                   </button>
                   <button
                     type="button"
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full mt-2 md:w-auto"
                     onClick={handleCancelClick}
                   >
                     Cancel
@@ -187,7 +212,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      {user.role === 'admin' && <AdminPost />} {/* Render AdminPost only if the user is an admin */}
+      {user.role === 'admin' && <AdminPost />} 
     </div>
   );
 };
