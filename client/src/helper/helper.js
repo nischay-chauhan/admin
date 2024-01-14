@@ -27,108 +27,125 @@ export const register = async (userData) => {
 };
 
 export const getAdminProfile = async (token) => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/admin/profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching admin profile:', error);
-      throw new Error('Error fetching admin profile');
-    }
-  };
-  
+  try {
+    const response = await axios.get(`${API_BASE_URL}/admin/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching admin profile:', error);
+    throw new Error('Error fetching admin profile');
+  }
+};
+
 export const getUserProfile = async (token) => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-      throw new Error('Error fetching user profile');
-    }
-  };
+  try {
+    const response = await axios.get(`${API_BASE_URL}/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    throw new Error('Error fetching user profile');
+  }
+};
 
 export const updateUserProfile = async (userData, token) => {
-    try {
-      const response = await axios.put(`${API_BASE_URL}/update-profile`, userData, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      toast.success('Profile updated successfully');
-      return response.data;
-    } catch (error) {
-      console.error('Error updating user profile:', error);
-      toast.error('Error updating user profile'); 
-      throw new Error('Error updating user profile');
-    }
-  };
+  try {
+    const response = await axios.put(`${API_BASE_URL}/update-profile`, userData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    toast.success('Profile updated successfully');
+    return response.data;
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    toast.error('Error updating user profile'); 
+    throw new Error('Error updating user profile');
+  }
+};
 
 export const getAllUsers = async (token) => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/admin/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching all users:', error);
-      throw new Error('Error fetching all users');
-    }
-  };
+  try {
+    const response = await axios.get(`${API_BASE_URL}/admin/users`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching all users:', error);
+    throw new Error('Error fetching all users');
+  }
+};
 
 export const handleLogout = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      await axios.post(
-        `${API_BASE_URL}/logout`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-  
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/';  
-    } catch (error) {
-      console.error('Error logging out:', error.message);
-    }
-  };
-export const createPost = async (values , token) => {
-    try {
-     const response =  await axios.post('http://localhost:3001/api/admin/posts', values, {
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(
+      `${API_BASE_URL}/logout`,
+      {},
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error creating post:', error);
-      throw new Error('Error creating post');
-    }
-  };
-  
+      }
+    );
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = '/';  
+  } catch (error) {
+    console.error('Error logging out:', error.message);
+  }
+};
+
+export const createPost = async (values, token) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/admin/posts`, values, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error creating post:', error);
+    throw new Error('Error creating post');
+  }
+};
+
 export const getAllPosts = async (token) => {
-    try {
-      const response = await axios.get('http://localhost:3001/api/posts', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-      throw new Error('Error fetching posts');
-    }
-  };
+  try {
+    const response = await axios.get(`${API_BASE_URL}/posts`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    throw new Error('Error fetching posts');
+  }
+};
+
+export const deleteUser = async (id, token) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/admin/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    toast.success('User deleted successfully');
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    toast.error('Error deleting user'); 
+    throw new Error('Error deleting user');
+  }
+};

@@ -71,4 +71,24 @@ const createPost = async (req , res) => {
 }
 }
 
-export { getAdminProfile , getAllusers , createPost };
+const deleteUser = async(req , res) => {
+  try{
+    const {id} = req.params;
+    const deletedUser = await User.findByIdAndDelete(id);
+    res.json({
+      success : true,
+      message : "User deleted successfully",
+      user : deletedUser
+    })
+  }catch(error){
+    console.log(error)
+    res.status(500).json({
+      success : false,
+      message : "Internal server error"
+    })
+  }
+}
+
+
+
+export { getAdminProfile , getAllusers , createPost , deleteUser };
