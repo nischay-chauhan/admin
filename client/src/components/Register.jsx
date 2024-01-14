@@ -59,15 +59,15 @@ const Register = () => {
   });
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500">
       <Toaster />
-      <div className='max-w-md mx-auto text-center'>
-      <h1 className='text-4xl text-gray-800 font-bold'>Register</h1>
+      <div className="max-w-md mx-auto text-center mb-8">
+        <h1 className="text-4xl text-white font-bold">Register</h1>
       </div>
-      <div className="max-w-md mx-auto">
-        <form onSubmit={formik.handleSubmit} className="mt-8 bg-white p-6 rounded shadow-md">
-          <div className="mb-4">
-            <label htmlFor="firstName" className="block text-gray-700 text-sm font-bold mb-2">
+      <div className="max-w-md mx-auto bg-white p-8 rounded shadow-md md:w-96 lg:w-1/2 xl:w-1/3">
+        <form onSubmit={formik.handleSubmit} className="mt-8">
+          <div className="mb-6">
+            <label htmlFor="firstName" className="block text-gray-700 text-lg font-bold mb-2">
               First Name
             </label>
             <input
@@ -79,8 +79,8 @@ const Register = () => {
               className="border rounded w-full py-2 px-3"
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="lastName" className="block text-gray-700 text-sm font-bold mb-2">
+          <div className="mb-6">
+            <label htmlFor="lastName" className="block text-gray-700 text-lg font-bold mb-2">
               Last Name
             </label>
             <input
@@ -92,8 +92,8 @@ const Register = () => {
               className="border rounded w-full py-2 px-3"
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
+          <div className="mb-6">
+            <label htmlFor="email" className="block text-gray-700 text-lg font-bold mb-2">
               Email
             </label>
             <input
@@ -105,8 +105,8 @@ const Register = () => {
               className="border rounded w-full py-2 px-3"
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-gray-700 text-lg font-bold mb-2">
               Password
             </label>
             <input
@@ -118,8 +118,8 @@ const Register = () => {
               className="border rounded w-full py-2 px-3"
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="role" className="block text-gray-700 text-sm font-bold mb-2">
+          <div className="mb-6">
+            <label htmlFor="role" className="block text-gray-700 text-lg font-bold mb-2">
               Role
             </label>
             <select
@@ -133,7 +133,7 @@ const Register = () => {
               <option value="admin">Admin</option>
             </select>
           </div>
-          <div className="mb-4">
+          <div className="mb-6">
             <button
               type="submit"
               className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
@@ -146,6 +146,7 @@ const Register = () => {
       </div>
     </div>
   );
+  
 };
 
 export default Register;

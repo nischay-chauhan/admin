@@ -37,8 +37,11 @@ const AllUsers = () => {
             <p className="text-gray-600">{`Role: ${user.role}`}</p>
           </li>
         ))}
+        
         <Link className='text-blue-500 hover:text-blue-700
-        hover:underline transition duration-300 ease-in-out ' to={"/profile"}>Go back</Link>
+        hover:underline transition duration-300 ease-in-out ' to={"/profile"}>
+         <button className='mt-4 mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Go back</button> 
+          </Link>
       </ul>
     </div>
   );

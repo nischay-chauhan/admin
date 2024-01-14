@@ -51,14 +51,13 @@ const Login = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500">
       <Toaster />
-      <div className="max-w-md mx-auto">
-        
-        <form onSubmit={formik.handleSubmit} className="mt-8 bg-white p-6 rounded shadow-md">
-        <h1 className=' text-3xl text-center font-bold mb-10'>LOGIN PAGE  </h1>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
+      <div className="max-w-md mx-auto bg-white p-8 rounded shadow-md md:w-96 lg:w-1/2 xl:w-1/3">
+        <form onSubmit={formik.handleSubmit} className="mt-8">
+          <h1 className="text-4xl text-center font-bold mb-6 text-bold">LOGIN PAGE</h1>
+          <div className="mb-6">
+            <label htmlFor="email" className="block text-gray-700 text-lg font-bold mb-2">
               Email
             </label>
             <input
@@ -70,8 +69,8 @@ const Login = () => {
               className="border rounded w-full py-2 px-3"
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-gray-700 text-lg font-bold mb-2">
               Password
             </label>
             <input
@@ -83,15 +82,15 @@ const Login = () => {
               className="border rounded w-full py-2 px-3"
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-6">
             <button
               type="submit"
-              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full md:w-auto"
             >
               Login
             </button>
-            <Link to="/register" className="ml-2 text-blue-500">
-              Register
+            <Link to="/register" className=" ml-4 text-blue-500 mt-2">
+              dont have an account?
             </Link>
           </div>
         </form>
