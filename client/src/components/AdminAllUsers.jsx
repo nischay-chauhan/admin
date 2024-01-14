@@ -1,7 +1,7 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getAllUsers, deleteUser } from '../helper/helper';
 import { Link } from 'react-router-dom';
-
+import {Toaster} from "react-hot-toast"
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,9 @@ const AllUsers = () => {
 
   return (
     <div className="max-w-md mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4 rounded-md">
+      <Toaster />
       <h2 className="text-3xl font-semibold mb-4">All Users</h2>
+      <h2 className='text-red-500 font-bold mb-4'>Keep in mind Admins cannot delete Admins </h2>
       <ul>
         {users.map((user) => (
           <li
@@ -50,12 +52,14 @@ const AllUsers = () => {
               Email: <Link className="text-blue-500" to={`mailto:${user.email}`} target="_blank">{user.email}</Link>
             </p>
             <p className="text-gray-600">{`Role: ${user.role}`}</p>
-            <button
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
-              onClick={() => handleDeleteUser(user._id)}
-            >
-              Delete
-            </button>
+            {user.role !== 'admin' && (  
+              <button
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                onClick={() => handleDeleteUser(user._id)}
+              >
+                Delete
+              </button>
+            )}
           </li>
         ))}
       </ul>

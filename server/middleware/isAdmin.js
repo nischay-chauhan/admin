@@ -15,11 +15,12 @@ function isAdmin(req, res, next) {
       return res.status(403).json({ success: false, message: 'Forbidden' });
     }
 
-    if (req.method === 'DELETE' && req.originalUrl.includes('/admin/users/')) {
-      if (userRole === 'admin') {
-        return res.status(403).json({ success: false, message: 'Admins cannot delete admins' });
-      }
-    }
+    // if (req.method === 'DELETE' && req.originalUrl.includes('/admin/users/')) {
+    //   if (userRole === 'admin') {
+    //     return res.status(403).json({ success: false, message: 'Admins cannot delete admins' });
+    //   }
+    // }
+    
     req.user = decoded.payload;
 
     next();
