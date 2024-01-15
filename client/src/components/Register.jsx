@@ -11,6 +11,7 @@ const Register = () => {
       email: '',
       password: '',
       role: 'user', 
+      profilePicture: null,
     },
     validate: (values) => {
       const errors = {};
@@ -47,6 +48,7 @@ const Register = () => {
     validateOnChange : false,
     onSubmit: async (values) => {
       try {
+
         const response = await register(values)
         console.log(response);
         toast.success('Registration successful');
@@ -56,8 +58,12 @@ const Register = () => {
         toast.error('Registration failed');
       }
     },
-  });
-
+  }
+  );
+  // const handleFileChange = (event) => {
+  //   formik.setFieldValue('profilePicture', event.currentTarget.files[0]);
+  // };
+  
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500">
       <Toaster />

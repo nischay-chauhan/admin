@@ -17,6 +17,7 @@ const getAdminProfile = async (req, res) => {
       lastName: admin.lastName,
       email: admin.email,
       role: admin.role,
+      profilePicture:admin.profilePicture,
     });
   } catch (error) {
     console.error(error); 

@@ -1,8 +1,10 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-
+import { cloudinaryUpload } from "../middleware/multerMiddleware.js";
 const register = async (req, res) => {
+  console.log(req.body);
+
   try {
     const { firstName, lastName, email, password, role } = req.body;
 
@@ -15,6 +17,14 @@ const register = async (req, res) => {
       });
     }
 
+    // let result;
+
+    // if (req.file) {
+    //   result = await cloudinaryUpload(req.file);
+    //   console.log("Cloudinary upload result:", result);
+    //   req.body.profilePicture = result;
+    // }
+    
     const userRole = role || "user";
 
     const hashPass = await bcrypt.hash(password, 10);
@@ -24,11 +34,15 @@ const register = async (req, res) => {
       email,
       password: hashPass,
       role: userRole,
+      // profilePicture: result.secure_url,
     });
+
 
     if (!user) {
       throw new Error("Something went wrong while signing up");
     }
+
+    console.log("Request body after Cloudinary upload:", req.body);
 
     res.status(200).json({
       success: true,
@@ -43,7 +57,10 @@ const register = async (req, res) => {
   }
 };
 
+
+
 const login = async (req, res) => {
+  
   try {
     const { email, password } = req.body;
 

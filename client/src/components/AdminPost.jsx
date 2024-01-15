@@ -44,7 +44,7 @@ const AdminPost = () => {
   });
 
   return (
-    <div className="max-w-md mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4 rounded-lg">
+    <div className="max-w-md min-h-full items-center justify-center mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4 rounded-lg">
       <h2 className="text-3xl font-semibold mb-6 text-center">Create a New Post</h2>
       <form onSubmit={formik.handleSubmit}>
         <div className="mb-4">

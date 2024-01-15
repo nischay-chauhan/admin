@@ -5,6 +5,8 @@ import Profile from "./components/Profile"
 import AdminAllUsers from "./components/AdminAllUsers"
 import Info from "./page/Info"
 import PageNotFound from "./page/PageNotFound"
+import AdminPost from "./components/AdminPost"
+import AdminPosts from "./components/AdminPosts.jsx"
 function App() {
 
   const router = createBrowserRouter([
@@ -27,6 +29,14 @@ function App() {
     {
       path : "/info",
       element : <Info />
+    },
+    {
+      path : "/adminpost",
+      element : <AdminPost />
+    },
+    {
+      path : "/admin/:userId/posts",
+      element : <AdminPosts />
     },
     {
       path : "*",

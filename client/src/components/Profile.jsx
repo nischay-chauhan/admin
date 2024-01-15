@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link , useNavigate } from 'react-router-dom';
 import { getAdminProfile, getUserProfile, updateUserProfile } from '../helper/helper';
 import { useFormik } from 'formik';
-import AdminPost from './AdminPost';
 import { Toaster } from 'react-hot-toast';
 const Profile = () => {
   const Navigate = useNavigate();
@@ -122,7 +121,7 @@ const Profile = () => {
 
   return (
     <div>
-    <div className="max-w-md mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4">
+    <div className="max-w-xl mx-auto rounded flex justify-center items-center bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4">
       <div className="md:flex">
         <Toaster />
         <div className="p-4">
@@ -152,6 +151,12 @@ const Profile = () => {
                 >
                   See all the Posts
                 </button>
+                {user.role === 'admin' &&<button
+                  onClick={() => Navigate("/adminpost")}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
+                >
+                  Make Post 
+                </button>} 
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto"
                   onClick={handleLogout}
@@ -212,7 +217,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      {user.role === 'admin' && <AdminPost />} 
+    
     </div>
   );
 };
