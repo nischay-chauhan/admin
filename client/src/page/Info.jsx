@@ -42,7 +42,8 @@ const Info = () => {
             />
           ))}
         </div>
-        <Link className='text-blue-500 ' to={'/profile'}>Go back to Profile </Link>
+        <Link className='text-blue-500 ' to={'/profile'}>
+          <button className=' bg-blue-500 text-white px-4 py-2 rounded'>Go back to Profile</button> </Link>
         </div>
       )}
   
