@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
 import PostCard from './PostCard';
+import { fetchAdminPosts } from '../helper/helper';
 
 const AdminPosts = () => {
   const { userId } = useParams();
@@ -9,18 +9,9 @@ const AdminPosts = () => {
   const [adminUser, setAdminUser] = useState({});
 
   useEffect(() => {
-    const fetchAdminPosts = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/api/users/${userId}/posts`);
-        setAdminPosts(response.data.posts);
-        setAdminUser(response.data.user);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchAdminPosts();
+    fetchAdminPosts(userId, setAdminPosts, setAdminUser);
   }, [userId]);
+
 
   return (
     <div className='container mx-auto p-8'>

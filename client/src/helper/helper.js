@@ -149,3 +149,15 @@ export const deleteUser = async (id, token) => {
     throw new Error('Error deleting user');
   }
 };
+
+export const fetchAdminPosts = async (userId, setAdminPosts, setAdminUser) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/users/${userId}/posts`);
+    setAdminPosts(response.data.posts);
+    setAdminUser(response.data.user);
+    toast.success('Admin posts fetched successfully');
+  } catch (error) {
+    console.error('Error fetching admin posts:', error);
+    toast.error('Error fetching admin posts');
+  }
+};
