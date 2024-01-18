@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import { cloudinaryUpload } from "../middleware/multerMiddleware.js";
+import { sendResetEmail } from "../mailer/Mailer.js";
 const register = async (req, res) => {
   console.log(req.body);
 
@@ -135,4 +136,82 @@ const logout = async (req, res) => {
     res.status(200).json({ success: true, message: 'Logged out successfully' });
 }
 
-export { register, login , logout };
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const resetToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '10m' });
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordTokenExpires = Date.now() + 10 * 60 * 1000;
+
+    await user.save();
+
+    const resetLink = `http://localhost:5173/reset-password/${user._id}/${resetToken}`;
+
+    await sendResetEmail({ to: user.email, resetLink });
+
+    res.json({
+      success: true,
+      message: "Password reset link sent to your email",
+    });
+
+  } catch (error) {
+    console.error('Error in forgotPassword:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error in forgotPassword',
+    });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { id, resetToken } = req.params;
+  const { password } = req.body;
+
+  try {
+    const decoded = jwt.verify(resetToken, process.env.JWT_SECRET);
+    
+    if (!decoded || !decoded._id) {
+      return res.status(400).json({
+        Status: 'Failed',
+        message: 'Invalid reset token',
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: id },
+      { password: hashedPassword },
+    );
+
+    res.json({ Status: 'Success' });
+  } catch (error) {
+    console.error('Error in resetPassword:', error);
+
+    if (error.name === 'TokenExpiredError') {
+      return res.status(400).json({
+        Status: 'Failed',
+        message: 'Reset token has expired',
+      });
+    }
+
+    res.status(500).json({ Status: 'Internal Server Error' });
+  }
+};
+
+
+
+export { register, login , logout , resetPassword,forgotPassword };
+
