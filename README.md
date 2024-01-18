@@ -68,12 +68,13 @@ Here You go : https://ethereal.email/
 
 
 ## Features
-
+- It uses formik library to handle the forms.
 - Allow a person to register either as a admin or a simple user
 - Based on the role authorities are provided for eg. An admin can post news , See all other users , delete someone suspicious person except admin etc.
 - It make use of the tailwind css and react-hot-toast and formik to make the frontend a bit more minimalist 
 - Made it such way a user can see All the posts made by Admins.
 - Also added the feature such that the user can also view all the specific posts made by that specific Admin
+- Now added Forgot password and reset Password functionality to it.
 
 ## License
 

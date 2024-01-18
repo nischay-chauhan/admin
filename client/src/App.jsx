@@ -7,6 +7,8 @@ import Info from "./page/Info"
 import PageNotFound from "./page/PageNotFound"
 import AdminPost from "./components/AdminPost"
 import AdminPosts from "./components/AdminPosts.jsx"
+import ForgotPassword from "./page/ForgotPassword.jsx"
+import ResetPassword from "./page/ResetPassword.jsx"
 function App() {
 
   const router = createBrowserRouter([
@@ -39,9 +41,17 @@ function App() {
       element : <AdminPosts />
     },
     {
+      path : "/forgotpassword",
+      element : <ForgotPassword />
+    },
+    {
+      path : "/reset-password/:userId/:resetToken",
+      element : <ResetPassword />
+    },
+    {
       path : "*",
       element : <PageNotFound />
-    }
+    },
   ])
 
   return (

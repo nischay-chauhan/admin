@@ -161,3 +161,23 @@ export const fetchAdminPosts = async (userId, setAdminPosts, setAdminUser) => {
     toast.error('Error fetching admin posts');
   }
 };
+
+export const forgotPassword = async (email) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/forgotpassword`, { email });
+    return response.data;
+  } catch (error) {
+    console.error('Forgot Password failed:', error);
+    throw new Error('Forgot Password failed');
+  }
+};
+
+export const resetPassword = async (userId, resetToken, password) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/resetpassword/${userId}/${resetToken}`, { password });
+    return response.data;
+  } catch (error) {
+    console.error('Reset Password failed:', error);
+    throw new Error('Reset Password failed');
+  }
+};
