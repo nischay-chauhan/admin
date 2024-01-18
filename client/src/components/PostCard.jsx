@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-const PostCard = ({ author, title, user, content, createdAt }) => {
+const PostCard = ({ title, author, content, createdAt }) => {
   const postDate = new Date(createdAt);
 
   const formattedDate = postDate.toLocaleDateString('en-US', {
@@ -14,28 +14,24 @@ const PostCard = ({ author, title, user, content, createdAt }) => {
     minute: 'numeric',
   });
 
-  const displayAuthorName = user
-    ? `${user.firstName} ${user.lastName}`
-    : (author && author.firstName && author.lastName) || "Unknown Author";
+  const displayAuthorName = `${author.firstName} ${author.lastName}`;
 
-  const authorLink = user ? (
-    <span>{displayAuthorName}</span>
-  ) : (
-    <Link to={`/admin/${author && author._id}/posts`} className="text-blue-500 mb-2">
+  const authorLink = (
+    <Link to={`/admin/${author._id}/posts`} className='text-blue-500 mb-2'>
       {`Author: ${displayAuthorName}`}
     </Link>
   );
 
   return (
-    <div className="border p-4 mb-4 flex justify-between">
+    <div className='border p-4 mb-4 flex justify-between'>
       <div>
-        <h2 className="text-xl font-semibold">{title}</h2>
+        <h2 className='text-xl font-semibold'>{title}</h2>
         {authorLink}
-        <p className="text-gray-700 mb-2">{content}</p>
+        <p className='text-gray-700 mb-2'>{content}</p>
       </div>
-      <div className="text-right">
-        <p className="text-gray-500 mb-2">Date: {formattedDate}</p>
-        <p className="text-gray-500">Time: {formattedTime}</p>
+      <div className='text-right'>
+        <p className='text-gray-500 mb-2'>Date: {formattedDate}</p>
+        <p className='text-gray-500'>Time: {formattedTime}</p>
       </div>
     </div>
   );

@@ -113,37 +113,49 @@ const getAllPosts = async(req , res) => {
 }
 }
 
-const getAdminPosts = async(req , res) => { 
-    try{
-        const {userId} = req.params;
-        console.log(userId);
-        if(!mongoose.Types.ObjectId.isValid(userId)){
-            return res.status(404).json({
-                success : false,
-                message : 'Imvalid user id found',
-            })
-        }
-        const user = await User.findById(userId);
-
-        const adminPosts = await Post.find({author : userId});
-        res.json({
-            success : true,
-            user: {
-                _id: user._id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-              },
-            posts : adminPosts,
+const getAdminPosts = async (req, res) => {
+    try {
+      const { userId } = req.params;
+      console.log(userId);
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(404).json({
+          success: false,
+          message: 'Invalid user id found',
         });
-
-    }catch(error){
-        console.error(error);
-        res.status(500).json({
-            success : false,
-            message : 'Internal server error for getting admin posts',
-        })
+      }
+  
+      const posts = await Post.find({ author: userId })
+        .populate('author', 'firstName lastName')
+        .exec();
+  
+      if (!posts) {
+        return res.status(404).json({
+          success: false,
+          message: 'No posts found for the given user id',
+        });
+      }
+  
+      const user = await User.findById(userId);
+  
+      res.json({
+        success: true,
+        user: {
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        },
+        posts,
+      });
+  
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error for getting admin posts',
+      });
     }
-}
+  };
+  
 
 export { getUserProfile , updateUserProfile , getAllPosts , getAdminPosts};

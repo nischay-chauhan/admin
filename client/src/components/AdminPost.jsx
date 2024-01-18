@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createPost } from '../helper/helper';
 const AdminPost = () => {
   const Navigate = useNavigate();
@@ -85,6 +85,11 @@ const AdminPost = () => {
           </button>
         </div>
       </form>
+      <div className='text-center'>
+           
+              <Link className='text-blue-500 hover:underline' to={'/profile'}>Go back to profile</Link>
+            
+      </div>
     </div>
   );
 };
