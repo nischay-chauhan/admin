@@ -130,6 +130,10 @@ const Profile = () => {
               <h2 className="text-2xl font-semibold">{user.firstName} {user.lastName}</h2>
               <p className="text-gray-600">Email: {user.email}</p>
               <p className="text-gray-600">Role: {user.role}</p>
+              <p className="text-gray-600">Created at: {user.createdAt}</p>
+              <div>
+                <img src={user?.profilePicture} alt={user.firstName} />
+              </div>
               <div className="mt-4 flex flex-wrap">
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"

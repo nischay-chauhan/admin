@@ -23,6 +23,7 @@ const getUserProfile = async (req, res) => {
                 lastName: user.lastName,
                 email: user.email,
                 role: user.role,
+                profilePicture: user.profilePicture,
             },
         });
     } catch (error) {
