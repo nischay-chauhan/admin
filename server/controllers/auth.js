@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import { cloudinaryUpload } from "../middleware/multerMiddleware.js";
+
 import { sendResetEmail } from "../mailer/Mailer.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 const register = async (req, res) => {
   console.log(req.body);
 
@@ -18,14 +19,18 @@ const register = async (req, res) => {
       });
     }
 
-    // let result;
+    const profilePicture = req.file;
+    console.log("Profile Picture:", profilePicture);
 
-    // if (req.file) {
-    //   result = await cloudinaryUpload(req.file);
-    //   console.log("Cloudinary upload result:", result);
-    //   req.body.profilePicture = result;
-    // }
-    
+    if (!profilePicture) {
+      return res.status(400).json({
+        success: false,
+        message: "Profile picture is required.",
+      });
+    }
+
+    const result = await uploadOnCloudinary(profilePicture.path);
+
     const userRole = role || "user";
 
     const hashPass = await bcrypt.hash(password, 10);
@@ -35,15 +40,14 @@ const register = async (req, res) => {
       email,
       password: hashPass,
       role: userRole,
-      // profilePicture: result.secure_url,
+      profilePicture: result.url,
     });
 
+    console.log("Request body after Cloudinary upload:",user);
 
     if (!user) {
       throw new Error("Something went wrong while signing up");
     }
-
-    console.log("Request body after Cloudinary upload:", req.body);
 
     res.status(200).json({
       success: true,
@@ -51,12 +55,15 @@ const register = async (req, res) => {
       user,
     });
   } catch (error) {
+    console.error("Registration failed:", error.message);
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Registration failed",
     });
   }
 };
+
+export default register;
 
 
 

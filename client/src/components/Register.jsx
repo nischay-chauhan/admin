@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import { Toaster, toast } from 'react-hot-toast';
-import {Link , useNavigate} from "react-router-dom"
+import { Link, useNavigate } from 'react-router-dom';
 import { register } from '../helper/helper';
 const Register = () => {
   const Navigate = useNavigate();
@@ -10,7 +10,7 @@ const Register = () => {
       lastName: '',
       email: '',
       password: '',
-      role: 'user', 
+      role: 'user',
       profilePicture: null,
     },
     validate: (values) => {
@@ -44,12 +44,23 @@ const Register = () => {
 
       return errors;
     },
-    validateOnBlur : false,
-    validateOnChange : false,
+    validateOnBlur: false,
+    validateOnChange: false,
     onSubmit: async (values) => {
       try {
+        console.log(values); // Log the actual form values
+        const formData = new FormData();
+        formData.append('profilePicture', values.profilePicture);
+        formData.append('firstName', values.firstName);
+        formData.append('lastName', values.lastName);
+        formData.append('email', values.email);
+        formData.append('password', values.password);
+        formData.append('role', values.role);
 
-        const response = await register(values)
+        console.log(formData);
+    
+        // Rest of your code
+        const response = await register(formData);
         console.log(response);
         toast.success('Registration successful');
         Navigate('/');
@@ -58,12 +69,12 @@ const Register = () => {
         toast.error('Registration failed');
       }
     },
-  }
-  );
-  // const handleFileChange = (event) => {
-  //   formik.setFieldValue('profilePicture', event.currentTarget.files[0]);
-  // };
-  
+  });
+
+  const handleFileChange = (event) => {
+    formik.setFieldValue('profilePicture', event.currentTarget.files[0]);
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500">
       <Toaster />
@@ -72,6 +83,37 @@ const Register = () => {
       </div>
       <div className="max-w-md mx-auto bg-white p-8 rounded shadow-md md:w-96 lg:w-1/2 xl:w-1/3">
         <form onSubmit={formik.handleSubmit} className="mt-8">
+          <div className="mb-6">
+            <label htmlFor="profilePicture" className="block text-gray-700 text-lg font-bold mb-2">
+              Profile Picture
+            </label>
+            <input
+              type="file"
+              id="profilePicture"
+              name="profilePicture"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="border rounded block w-full py-2 px-3"
+              style={{ display: 'block' }}
+            />
+            {formik.values.profilePicture && (
+              <div className="mt-2">
+                <img
+                  src={URL.createObjectURL(formik.values.profilePicture)}
+                  alt="Profile Preview"
+                  className="rounded border"
+                  style={{ maxWidth: '150px', maxHeight: '150px' }}
+                />
+                <button
+                  type="button"
+                  className="bg-red-500 text-white px-4 py-2 rounded-md ml-2"
+                  onClick={() => formik.setFieldValue('profilePicture', null)}
+                >
+                  Remove Pic
+                </button>
+              </div>
+            )}
+          </div>
           <div className="mb-6">
             <label htmlFor="firstName" className="block text-gray-700 text-lg font-bold mb-2">
               First Name
@@ -146,13 +188,14 @@ const Register = () => {
             >
               Register
             </button>
-            <Link className='ml-4 text-blue-500' to='/'>Already registered </Link>
+            <Link className="ml-4 text-blue-500" to="/">
+              Already registered
+            </Link>
           </div>
         </form>
       </div>
     </div>
   );
-  
 };
 
 export default Register;
