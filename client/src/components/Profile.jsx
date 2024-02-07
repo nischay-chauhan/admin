@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Link , useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getAdminProfile, getUserProfile, updateUserProfile } from '../helper/helper';
 import { useFormik } from 'formik';
 import { Toaster } from 'react-hot-toast';
+
 const Profile = () => {
   const Navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
-
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -20,14 +20,13 @@ const Profile = () => {
         fetchUserProfile(token);
       }
     }
-
-
   }, []);
 
   const fetchAdminProfile = async (token) => {
     try {
       const response = await getAdminProfile(token);
       setUser(response);
+      
     } catch (error) {
       console.error('Error fetching admin profile:', error.message);
     }
@@ -41,12 +40,14 @@ const Profile = () => {
       console.error('Error fetching user profile:', error.message);
     }
   };
+  
 
   const formik = useFormik({
     initialValues: {
       firstName: '',
       lastName: '',
       email: '',
+      profilePicture: null, 
     },
     validate: (values) => {
       const errors = {};
@@ -92,6 +93,7 @@ const Profile = () => {
     });
   };
 
+
   const handleCancelClick = () => {
     setEditMode(false);
   };
@@ -107,13 +109,12 @@ const Profile = () => {
       console.error('Error logging out:', error.message);
     }
   };
-
   if (!user) {
     return (
       <div className="text-center mt-8">
         Loading error reaching...{' '}
         <Link className="text-blue-500 hover:underline" to="/">
-          Try loggin in again
+          Try logging in again
         </Link>
       </div>
     );
@@ -121,54 +122,63 @@ const Profile = () => {
 
   return (
     <div>
-    <div className="max-w-xl mx-auto rounded flex justify-center items-center bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4">
-      <div className="md:flex">
-        <Toaster />
-        <div className="p-4">
-          {!editMode ? (
-            <>
-              <h2 className="text-2xl font-semibold">{user.firstName} {user.lastName}</h2>
-              <p className="text-gray-600">Email: {user.email}</p>
-              <p className="text-gray-600">Role: {user.role}</p>
-              <p className="text-gray-600">Created at: {user.createdAt}</p>
-              <div>
-                <img src={user?.profilePicture} alt={user.firstName} />
-              </div>
-              <div className="mt-4 flex flex-wrap">
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
-                  onClick={handleEditClick}
-                >
-                  Edit Details
-                </button>
-                {user.role === 'admin' && (
+      <div className="max-w-xl mx-auto rounded flex justify-center items-center bg-white shadow-md overflow-hidden md:max-w-2xl mt-8 p-4">
+        <div className="md:flex">
+          <Toaster />
+          <div className="p-4">
+            {!editMode ? (
+              <>
+                <h2 className="text-2xl font-semibold">
+                  {user.firstName} {user.lastName}
+                </h2>
+                <p className="text-gray-600">Email: {user.email}</p>
+                <p className="text-gray-600">Role: {user.role}</p>
+                <p className="text-gray-600">Created at: {user.createdAt}</p>
+                <div>
+                  <img src={user?.profilePicture} alt={user.firstName} />
+                </div>
+                <div className="mt-4 flex flex-wrap">
                   <button
-                    onClick={() => Navigate("/getAllusers")}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
+                    onClick={handleEditClick}
+                  >
+                    Edit Details
+                  </button>
+                  {user.role === 'admin' && (
+                    <button
+                      onClick={() => Navigate('/getAllusers')}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
+                    >
+                      See All Users
+                    </button>
+                  )}
+                  <button
+                    onClick={() => Navigate('/info')}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
                   >
-                    See All Users
+                    See all the Posts
                   </button>
-                )}
-                <button
-                  onClick={() => Navigate("/info")}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
-                >
-                  See all the Posts
-                </button>
-                {user.role === 'admin' &&<button
-                  onClick={() => Navigate("/adminpost")}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
-                >
-                  Make Post 
-                </button>} 
-                <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-              </div>
-            </>
+                  {user.role === 'admin' && (
+                    <button
+                      onClick={() => Navigate('/adminpost')}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
+                    >
+                      Make Post
+                    </button>
+                    
+                  )}
+                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2">
+                   <Link to={`/profile/${user._id}/update-picture`} >Change Profile Picture</Link>
+                   </button>
+                  <button
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                 
+                </div>
+              </>
             ) : (
               <form onSubmit={formik.handleSubmit}>
                 <label className="block">
@@ -201,6 +211,20 @@ const Profile = () => {
                     className="form-input mt-1 block w-full"
                   />
                 </label>
+                <label className="block mt-4">
+                  Profile Picture:
+                  <input
+                    type="file"
+                    name="profilePicture"
+                    onChange={(event) =>
+                      formik.setFieldValue(
+                        'profilePicture',
+                        event.currentTarget.files[0]
+                      )
+                    }
+                    className="form-input mt-1 block w-full"
+                  />
+                </label>
                 <div className="mt-4 flex flex-wrap">
                   <button
                     type="submit"
@@ -217,11 +241,12 @@ const Profile = () => {
                   </button>
                 </div>
               </form>
+              
             )}
+       
           </div>
         </div>
       </div>
-    
     </div>
   );
 };

@@ -9,8 +9,9 @@ import AdminPost from "./components/AdminPost"
 import AdminPosts from "./components/AdminPosts.jsx"
 import ForgotPassword from "./page/ForgotPassword.jsx"
 import ResetPassword from "./page/ResetPassword.jsx"
-function App() {
+import ProfilePictureUpdatePage from "./page/ProfilePicturePage.jsx"
 
+function App() {
   const router = createBrowserRouter([
     {
       path: "/",
@@ -49,16 +50,20 @@ function App() {
       element : <ResetPassword />
     },
     {
+      path : "/profile/:userId/update-picture",
+      element : <ProfilePictureUpdatePage />
+    },
+    {
       path : "*",
       element : <PageNotFound />
     },
-  ])
+  ]);
 
   return (
     <>
      <RouterProvider router={router} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

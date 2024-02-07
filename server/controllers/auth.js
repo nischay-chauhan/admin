@@ -5,7 +5,7 @@ import User from "../models/User.js";
 import { sendResetEmail } from "../mailer/Mailer.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 const register = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
 
   try {
     const { firstName, lastName, email, password, role } = req.body;
@@ -20,7 +20,7 @@ const register = async (req, res) => {
     }
 
     const profilePicture = req.file;
-    console.log("Profile Picture:", profilePicture);
+    // console.log("Profile Picture:", profilePicture);
 
     if (!profilePicture) {
       return res.status(400).json({
@@ -43,7 +43,7 @@ const register = async (req, res) => {
       profilePicture: result.url,
     });
 
-    console.log("Request body after Cloudinary upload:",user);
+    // console.log("Request body after Cloudinary upload:",user);
 
     if (!user) {
       throw new Error("Something went wrong while signing up");
@@ -62,11 +62,6 @@ const register = async (req, res) => {
     });
   }
 };
-
-export default register;
-
-
-
 const login = async (req, res) => {
   
   try {

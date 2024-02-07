@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Post from '../models/Post.js';
 import User from '../models/User.js';
+import { uploadOnCloudinary } from '../utils/cloudinary.js';
 
 const getUserProfile = async (req, res) => {
     try {
@@ -35,7 +36,6 @@ const getUserProfile = async (req, res) => {
 };
 
 const updateUserProfile = async (req, res) => {
-    console.log(req.user);
     try {
         const userId = req.user.payload.id;
 
@@ -158,5 +158,47 @@ const getAdminPosts = async (req, res) => {
     }
   };
   
+  const updateProfilePicture = async (req, res) => {
+    const { userId } = req.params;
+    const profilePicturepath = req.file?.path;
+  
+    if (!profilePicturepath) {
+      return res.status(400).json({
+        success: false,
+        message: "Profile picture is required"
+      });
+    }
+  
+    try {
+      const profilePicture = await uploadOnCloudinary(profilePicturepath);
+      if (!profilePicture.url) {
+        return res.status(400).json({
+          success: false,
+          message: "Profile picture failed to upload to Cloudinary"
+        });
+      }
+  
+      const prevuser = await User.findById(userId);
+      const user = await User.findByIdAndUpdate(userId, {
+        $set: {
+          profilePicture: profilePicture.url
+        },
+      },
+      { new: true }
+      ).select("-password");
 
-export { getUserProfile , updateUserProfile , getAllPosts , getAdminPosts};
+      res.json({
+        success: true,
+        message: "Profile picture updated successfully"
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error while changing the profile picture"
+      });
+    }
+  };
+  
+
+export { getUserProfile , updateUserProfile , getAllPosts , getAdminPosts , updateProfilePicture};
