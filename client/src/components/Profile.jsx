@@ -1,20 +1,24 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { getAdminProfile, getUserProfile, updateUserProfile } from '../helper/helper';
-import { useFormik } from 'formik';
-import { Toaster } from 'react-hot-toast';
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  getAdminProfile,
+  getUserProfile,
+  updateUserProfile,
+} from "../helper/helper";
+import { useFormik } from "formik";
+import { Toaster } from "react-hot-toast";
 
 const Profile = () => {
   const Navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     if (token) {
-      const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
+      const userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
 
-      if (userFromLocalStorage && userFromLocalStorage.role === 'admin') {
+      if (userFromLocalStorage && userFromLocalStorage.role === "admin") {
         fetchAdminProfile(token);
       } else {
         fetchUserProfile(token);
@@ -26,9 +30,8 @@ const Profile = () => {
     try {
       const response = await getAdminProfile(token);
       setUser(response);
-      
     } catch (error) {
-      console.error('Error fetching admin profile:', error.message);
+      console.error("Error fetching admin profile:", error.message);
     }
   };
 
@@ -37,30 +40,29 @@ const Profile = () => {
       const response = await getUserProfile(token);
       setUser(response.user);
     } catch (error) {
-      console.error('Error fetching user profile:', error.message);
+      console.error("Error fetching user profile:", error.message);
     }
   };
-  
 
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      profilePicture: null, 
+      firstName: "",
+      lastName: "",
+      email: "",
+      profilePicture: null,
     },
     validate: (values) => {
       const errors = {};
       if (!values.firstName.trim()) {
-        errors.title = 'firstname is required';
+        errors.title = "firstname is required";
       }
 
       if (!values.lastName.trim()) {
-        errors.content = 'lastname is required';
+        errors.content = "lastname is required";
       }
 
       if (!values.email.trim()) {
-        errors.content = 'email is required';
+        errors.content = "email is required";
       }
 
       return errors;
@@ -68,10 +70,10 @@ const Profile = () => {
     enableReinitialize: true,
     onSubmit: async (values) => {
       try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         await updateUserProfile(values, token);
 
-        if (user.role === 'admin') {
+        if (user.role === "admin") {
           fetchAdminProfile(token);
         } else {
           fetchUserProfile(token);
@@ -79,7 +81,7 @@ const Profile = () => {
 
         setEditMode(false);
       } catch (error) {
-        console.error('Error updating user profile:', error.message);
+        console.error("Error updating user profile:", error.message);
       }
     },
   });
@@ -93,26 +95,25 @@ const Profile = () => {
     });
   };
 
-
   const handleCancelClick = () => {
     setEditMode(false);
   };
 
   const handleLogout = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       await handleLogout(token);
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/';
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/";
     } catch (error) {
-      console.error('Error logging out:', error.message);
+      console.error("Error logging out:", error.message);
     }
   };
   if (!user) {
     return (
       <div className="text-center mt-8">
-        Loading error reaching...{' '}
+        Loading error reaching...{" "}
         <Link className="text-blue-500 hover:underline" to="/">
           Try logging in again
         </Link>
@@ -134,8 +135,17 @@ const Profile = () => {
                 <p className="text-gray-600">Email: {user.email}</p>
                 <p className="text-gray-600">Role: {user.role}</p>
                 <p className="text-gray-600">Created at: {user.createdAt}</p>
-                <div>
-                  <img src={user?.profilePicture} alt={user.firstName} />
+                <div className="relative mt-4">
+                  <img
+                    src={user?.profilePicture}
+                    alt={user.firstName}
+                    className="rounded-full h-40 w-40 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full w-40 h-40 opacity-0 hover:opacity-100 transition-opacity duration-300 flex justify-center items-center">
+                    <Link className="text-white" to={`/profile/${user._id}/update-picture`}>
+                      Change Picture
+                    </Link>
+                  </div>
                 </div>
                 <div className="mt-4 flex flex-wrap">
                   <button
@@ -144,39 +154,34 @@ const Profile = () => {
                   >
                     Edit Details
                   </button>
-                  {user.role === 'admin' && (
+                  {user.role === "admin" && (
                     <button
-                      onClick={() => Navigate('/getAllusers')}
+                      onClick={() => Navigate("/getAllusers")}
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
                     >
                       See All Users
                     </button>
                   )}
                   <button
-                    onClick={() => Navigate('/info')}
+                    onClick={() => Navigate("/info")}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
                   >
                     See all the Posts
                   </button>
-                  {user.role === 'admin' && (
+                  {user.role === "admin" && (
                     <button
-                      onClick={() => Navigate('/adminpost')}
+                      onClick={() => Navigate("/adminpost")}
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
                     >
                       Make Post
                     </button>
-                    
                   )}
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2">
-                   <Link to={`/profile/${user._id}/update-picture`} >Change Profile Picture</Link>
-                   </button>
                   <button
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto"
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2 w-full md:w-auto mr-2"
                     onClick={handleLogout}
                   >
                     Logout
                   </button>
-                 
                 </div>
               </>
             ) : (
@@ -218,7 +223,7 @@ const Profile = () => {
                     name="profilePicture"
                     onChange={(event) =>
                       formik.setFieldValue(
-                        'profilePicture',
+                        "profilePicture",
                         event.currentTarget.files[0]
                       )
                     }
@@ -241,9 +246,7 @@ const Profile = () => {
                   </button>
                 </div>
               </form>
-              
             )}
-       
           </div>
         </div>
       </div>
